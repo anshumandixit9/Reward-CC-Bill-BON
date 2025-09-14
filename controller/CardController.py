@@ -1,8 +1,13 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
+from models.UserCard import UserCard
+from services import CardService
 
-# Define endpoints WITHOUT prefix
 router = APIRouter()
 
-@router.get("/healthcheck")
-def get_cards():
-    return {"message": "List of cards"}
+@router.post("/register-user-card")
+async def register_user_card(user_card: UserCard):
+    try:
+        result = await CardService.register_user_card(user_card)
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
