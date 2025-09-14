@@ -46,46 +46,77 @@
 - Then that paymentId can be referenced in the bill table.
 - But we are avoiding that due to time constraint.
 
-## Example API Usage
-- Endpoints
-- POST: /user/create-user
-    BODY: {
-        "UserName": "anshumandx7",
-        "FirstName": "Anshuman",
-        "LastName": "Dixit",
-        "ContactNumber": "1234567890"
-    }
+# 📌 Example API Usage
 
-- POST: /card/register-user-card
-BODY: {
-        "UserId": 2,
-        "CardNumber": "1234123412341234", -- Validated based on global standard of 19 digits
-        "BillingDay": 17,                 -- 1-28 considering feburary
-        "DueDays": 20
-    }
+### 1. Create User  
+**POST** `/user/create-user`  
+**Request Body:**  
+```json
+{
+  "UserName": "anshumandx7",
+  "FirstName": "Anshuman",
+  "LastName": "Dixit",
+  "ContactNumber": "1234567890"
+}
+```
 
-- POST: /bill/create-bill
-BODY: {
-        "BillDescription": "My Description",
-        "CardId": 2,
-        "Month": "2024-10"
-    }
+---
 
-- POST: /bill/pay-bill
-PARAMS: 
-* bill_id : 2
-* payment_id : "ywoqieywqoi32321"
+### 2. Register Card For User  
+**POST** `/card/register-user-card`  
+**Request Body:**  
+```json
+{
+  "UserId": 2,
+  "CardNumber": "1234123412341234",
+  "BillingDay": 17,
+  "DueDays": 20
+}
+```
 
-- GET: /bill/get-user-bills
-PARAMS:
-* user_id : 2
-* start_month: 2024-09 -- optional
-* end_month: 2025-10   -- optional
+---
 
-- GET: /bill/bill-details
-PARAMS:
-* bill_id : 2
+### 3. Create Bill For User  
+**POST** `/bill/create-bill`  
+**Request Body:**  
+```json
+{
+  "BillDescription": "My Description",
+  "CardId": 2,
+  "Month": "2024-10"
+}
+```
 
-- GET: /bill/last-3-bills-reward
-PARAMS:
-* user_id : 2
+---
+
+### 4. Pay Bill  
+**POST** `/bill/pay-bill`  
+**Request Body or Params:**  
+- `bill_id`: 2  
+- `payment_id`: "ywoqieywqoi32321"  
+- `paid_datetime`: "2025-09-14T09:20:04.194030"
+
+---
+
+### 5. Get User Bills For Date Range  
+**GET** `/bill/get-user-bills`  
+**Query Params:**  
+- `user_id`: 2  
+- `start_month`: 2024-09 (optional)  
+- `end_month`: 2025-10 (optional)
+
+---
+
+### 6. Get Details For Bill  
+**GET** `/bill/bill-details`  
+**Query Params:**  
+- `bill_id`: 2
+
+---
+
+### 7. Generate Reward Based on User Eligibility  
+**GET** `/bill/last-3-bills-reward`  
+**Query Params:**  
+- `user_id`: 2
+
+---
