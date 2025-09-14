@@ -18,9 +18,9 @@ async def create_bill(bill: Bill):
         created_date = datetime.utcnow()
         return await BillRepository.create_bill(db, bill, due_datetime, created_date)
 
-async def pay_bill(bill_id: int, payment_id: str):
+async def pay_bill(bill_id: int, payment_id: str, paid_datetime: datetime = None):
     async with get_db_connection() as db:
-        return await BillRepository.pay_bill(db, bill_id, payment_id)
+        return await BillRepository.pay_bill(db, bill_id, payment_id, paid_datetime)
 
 async def get_bills_by_user_month_range(user_id: int, start_month: str = None, end_month: str = None):
     now = datetime.utcnow()

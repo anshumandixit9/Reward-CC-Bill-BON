@@ -21,13 +21,15 @@ async def create_bill(db, bill: Bill, due_datetime, created_date):
     )
     return {"message": "Bill created successfully", "bill_id": result["BillId"]}
 
-async def pay_bill(db, bill_id: int, payment_id: str):
+async def pay_bill(db, bill_id: int, payment_id: str, paid_datetime: datetime = None):
+    # Check if bill is already paid
     bill = await db.fetchrow('SELECT "PaidDateTime" FROM "Bills" WHERE "BillId" = $1;', bill_id)
     if not bill:
         raise HTTPException(status_code=404, detail="Bill not found")
     if bill["PaidDateTime"] is not None:
         raise HTTPException(status_code=409, detail="Bill is already paid")
-    paid_datetime = datetime.utcnow()
+    # Use provided paid_datetime or current time
+    paid_datetime = paid_datetime or datetime.utcnow()
     row = await db.fetchrow(
         queries.UPDATE_BILL_PAYMENT,
         paid_datetime,

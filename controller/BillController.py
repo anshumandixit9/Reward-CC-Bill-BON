@@ -1,6 +1,7 @@
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, Body
 from models.Bill import Bill
 from services import BillService
+from datetime import datetime
 
 router = APIRouter()
 
@@ -13,12 +14,17 @@ async def create_bill(bill: Bill):
         raise HTTPException(status_code=400, detail=str(e))
 
 @router.post("/pay-bill")
-async def pay_bill(bill_id: int, payment_id: str):
+async def pay_bill(
+    bill_id: int,
+    payment_id: str,
+    paid_datetime: datetime
+) -> dict:
     try:
-        result = await BillService.pay_bill(bill_id, payment_id)
+        result = await BillService.pay_bill(bill_id, payment_id, paid_datetime)
         return result
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+
 
 @router.get("/get-user-bills")
 async def get_bills(
